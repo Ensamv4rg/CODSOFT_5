@@ -54,7 +54,7 @@ def calculate(first,operator,second):
 
 def solver(expression):#Uses BODMAS
     expression=expression
-    
+    print(expression)
     if type(expression) ==float: return expression #More or less ends the recursion
     try:
         if expression[0] == '-': return float(expression[1:])*-1 # ends the recursion to avoid problems
@@ -139,7 +139,7 @@ def error_handling(expression):
     
     #Code to properly handle brackets being used for multiplication
     i = len(expression) - 1
-    while i >= 0:
+    while i >= 1:
         char = expression[i]
         if char == '(' and expression[i-1] not in ['/','^','*','(','+','-']:
             expression = expression[:i] + '*' + expression[i:]
@@ -156,6 +156,7 @@ def compute(expression):
     print(value)
 
 
-# Tests
-expression = '3/10'
+expression = input("""
+    Enter an expression to evalute. Standard Matehmatical operations apply.
+""")
 compute(expression)
