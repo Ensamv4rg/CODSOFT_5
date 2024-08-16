@@ -1,6 +1,5 @@
-def base_splitter(expression, target=None):
-    if target is None:
-        target = set('+-*/^%')
+def base_splitter(expression):
+    target = set('+-*/^%')
     
     bracket_count = 0  # Tracks the level of brackets
     splits = []  # To store the split parts and operators
@@ -50,13 +49,12 @@ def calculate(first,operator,second):
         case '^':return float(first)**float(second)
 
 
-    order = ['^','/','*','+','-']
-
 def solver(expression):#Uses BODMAS
     expression=expression
     if type(expression) ==float: return expression #More or less ends the recursion
     try:
         if expression[0] == '-': return float(expression[1:])*-1 # ends the recursion to avoid problems
+        if expression[0] == '+': return float(expression[1:])
     except:
         raise SyntaxError(f'Misplaced/Mismatched Operators')
     #Locates all operators and returns their indexs in the list
@@ -73,7 +71,7 @@ def solver(expression):#Uses BODMAS
 
     #creates a dictionary of operators(arrranged with BODMAS in mind), and thier indexes
     operators = set('+-*/^')  
-    indices = {'^':[],'/':[],'*':[],'+':[], '-':[]}
+    indices = {'^':[],'/':[],'*':[],'-':[],'+':[]}
     for i,char in enumerate(expression):
         if char in operators and expression[i-1] not in operators: indices[char].append(i)
     
@@ -114,7 +112,7 @@ def solver(expression):#Uses BODMAS
         
         
     answer = solver(expression)
-    return solver(expression)
+    return answer
         
    
     #Step 1. Look for brackets:(B)
@@ -156,6 +154,6 @@ def compute(expression):
 
 
 expression = input("""
-    Enter an expression to evalute. Standard Matehmatical operations apply.
+Enter an expression to evalute. Standard Matehmatical operations apply.
 """)
 compute(expression)
