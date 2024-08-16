@@ -54,7 +54,6 @@ def calculate(first,operator,second):
 
 def solver(expression):#Uses BODMAS
     expression=expression
-    print(expression)
     if type(expression) ==float: return expression #More or less ends the recursion
     try:
         if expression[0] == '-': return float(expression[1:])*-1 # ends the recursion to avoid problems
