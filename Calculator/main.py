@@ -21,12 +21,12 @@ def base_splitter(expression, target=None):
     # Append the final segment after the last operator
     splits.append(expression[last_split:].strip())
     if splits[0] == '': splits[0] = 0.0
-    print('Becomes',splits)
+    
     
     return splits
 
 def calculate(first,operator,second):
-    print(first,operator,second)
+    
 
     #Code to handle Negative input unproblematically
     try:
@@ -54,10 +54,12 @@ def calculate(first,operator,second):
 
 def solver(expression):#Uses BODMAS
     expression=expression
-    print('NiG-',expression)
+    
     if type(expression) ==float: return expression #More or less ends the recursion
-    if expression[0] == '-': return float(expression[1:])*-1 # ends the recursion to avoid problems
-
+    try:
+        if expression[0] == '-': return float(expression[1:])*-1 # ends the recursion to avoid problems
+    except:
+        raise SyntaxError(f'Misplaced/Mismatched Operators')
     #Locates all operators and returns their indexs in the list
     for index,argument in enumerate(expression):
         #Simplifies arguments with Brackets
@@ -79,7 +81,7 @@ def solver(expression):#Uses BODMAS
     #Removes Blank operators 
     for operator in indices.copy():
         if not indices[operator]: del indices[operator]
-    #print(indices)
+    
     if indices == {}:return expression[0:] #When Indices are empty, it implies the expression is just a number.
 
 
@@ -90,7 +92,7 @@ def solver(expression):#Uses BODMAS
         for index in indices[operator]:
 
             #Simplification of complex expressions
-            print(expression)
+            
             first_number_positiion = 1
             second_number_positiion = 1
 
@@ -126,24 +128,34 @@ def solver(expression):#Uses BODMAS
 
 def error_handling(expression):
     if expression[0] in ['/','^','*']:raise SyntaxError('Expression cannot begin with an operator')
-    if expression[-1] in ['/','^','*']:expression=expression[:-1]
     if expression.upper() != expression.lower():raise SyntaxError('Expression should not contain letters')
-    #if expression[0] == '+':expression=expression[1:]
-
+    if expression.count('(') != expression.count(')'): raise SyntaxError("A '(' was not closed ")
+    
+    
+    if expression[-1] in ['/','^','*']:expression=expression[:-1]
     if any(char in ['{','['] for char in expression):
         replace_map = {'[':'(', '{':'(', ']':')','{':')'}
         expression = ''.join(map(lambda char: replace_map.get(char, char), expression))
-
-    if expression.count('(') != expression.count(')'): raise SyntaxError("A '(' was not closed ")
+    
+    #Code to properly handle brackets being used for multiplication
+    i = len(expression) - 1
+    while i >= 0:
+        char = expression[i]
+        if char == '(' and expression[i-1] not in ['/','^','*','(','+','-']:
+            expression = expression[:i] + '*' + expression[i:]
+            
+        i -= 1
     expression = expression.strip()
+    
+
     return expression
 
 def compute(expression):
     values = solver(base_splitter(error_handling(expression)))
-    value = [element for element in values if bool(element)]#Gets all possible Values of of it
+    value = [element for element in values if bool(element)][0]#Gets all possible Values of of it
     print(value)
 
 
 # Tests
-expression = '-2*-3*-6+5/'
+expression = '3/10'
 compute(expression)
