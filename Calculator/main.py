@@ -48,7 +48,6 @@ def calculate(first,operator,second):
         case '/':return float(first)/float(second)
         case '^':return float(first)**float(second)
 
-
 def solver(expression):#Uses BODMAS
     expression=expression
     if type(expression) ==float: return expression #More or less ends the recursion
@@ -124,6 +123,7 @@ def solver(expression):#Uses BODMAS
     #return value
 
 def error_handling(expression):
+    if '++' in expression or  '--' in expression or  '-+' in expression or '+-' in expression: raise SyntaxError('Mismatched Operators')
     if expression[0] in ['/','^','*']:raise SyntaxError('Expression cannot begin with an operator')
     if expression.upper() != expression.lower():raise SyntaxError('Expression should not contain letters')
     if expression.count('(') != expression.count(')'): raise SyntaxError("A '(' was not closed ")
